@@ -125,6 +125,28 @@ financial-document-analyzer/
 ├── .gitignore           # Security & cleanup rules
 └── README.md
 
+### File Responsibilities
+
+- **main.py**  
+  Handles FastAPI initialization, file upload endpoint (`/analyze`), and orchestrates the Crew execution pipeline.
+
+- **agents.py**  
+  Defines all AI agents including:
+  - Document Verifier  
+  - Financial Analyst  
+  - Risk Assessor  
+  - Investment Advisor  
+
+- **task.py**  
+  Implements the sequential workflow ensuring logical execution order and context passing between agents.
+
+- **tools.py**  
+  Contains custom tools for:
+  - Reading financial documents  
+  - Handling document parsing  
+  - Supporting agent execution  
+
+---
 ## 🛠 Setup & Installation
 ### 1️⃣ Clone the Repository
 - git clone https://github.com/<your-username>/<your-repo-name>.git
