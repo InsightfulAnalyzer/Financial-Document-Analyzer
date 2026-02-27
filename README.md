@@ -1,248 +1,197 @@
-📊 Financial Document Analyzer (Refactored & Production-Ready Version)
-📝 Project Overview
+# 📊 Financial Document Analyzer (Refactored & Production-Ready)
 
-The Financial Document Analyzer is a multi-agent AI system built using CrewAI and served through a FastAPI backend.
+## 📝 Project Overview
+
+The **Financial Document Analyzer** is a multi-agent AI system built using CrewAI and served through a FastAPI backend.
 
 The application allows users to upload financial documents (such as annual or quarterly reports) and receive structured insights including:
 
-Document validation
-
-Financial analysis
-
-Risk assessment
-
-Investment recommendations
+- 📄 Document validation  
+- 📊 Financial analysis  
+- ⚠️ Risk assessment  
+- 💰 Investment recommendations  
 
 The system simulates a team of financial experts — each agent has a defined responsibility, and tasks are executed sequentially to ensure logical information flow.
 
-This version of the project represents a fully debugged, stabilized, and refactored implementation after resolving major dependency conflicts, runtime errors, architectural issues, and security flaws.
+This version represents a fully debugged, stabilized, and refactored implementation after resolving major dependency conflicts, runtime errors, architectural issues, and security flaws.
 
-🐛 Major Issues Identified & How They Were Resolved
+---
 
-The original implementation contained multiple breaking issues at environment, framework, and code levels. Below is a summary of improvements.
+## 🐛 Major Issues Identified & Fixes Implemented
 
-1️⃣ Environment & Dependency Stabilization
+The original implementation contained multiple breaking issues at environment, framework, and code levels.
+
+---
+
+## 1️⃣ Environment & Dependency Stabilization
 
 The initial setup suffered from severe package conflicts and framework incompatibilities.
 
-✔ Dependency Conflicts Resolved
+### ✔ Version Conflicts Resolved
 
-Multiple version mismatches were identified involving:
+Conflicts involving:
+- onnxruntime  
+- pydantic  
+- click  
+- packaging  
+- openai  
+- langchain  
+- chromadb  
 
-onnxruntime
+were identified and resolved.
 
-pydantic
+### ✔ CrewAI Framework Upgrade
 
-click
+The earlier CrewAI version caused internal incompatibilities.  
+The project was migrated to a stable CrewAI release, resolving deep dependency and import issues.
 
-openai
+### ✔ Removal of `crewai-tools`
 
-packaging
+A fundamental incompatibility existed between crewai and crewai-tools.
 
-langchain
-
-chromadb
-
-These conflicts prevented the environment from building correctly.
-
-✔ Framework Version Upgrade
-
-The earlier CrewAI version caused internal incompatibilities.
-The project was migrated to a stable CrewAI release, eliminating deep dependency issues and resolving import failures.
-
-✔ Removal of crewai-tools
-
-A critical incompatibility existed between crewai and crewai-tools.
 Instead of forcing unstable combinations:
 
-crewai-tools was completely removed.
+- crewai-tools was removed  
+- Required tools were re-implemented manually inside `tools.py`
 
-Required tools were reimplemented manually inside tools.py.
+This resulted in improved stability and fewer external conflicts.
 
-This made the project:
+### ✔ Clean & Stabilized `requirements.txt`
 
-More stable
+The requirements file was cleaned and pinned to prevent cascading dependency failures.
 
-Easier to maintain
+---
 
-Less dependent on third-party version chains
+## 2️⃣ Code & Runtime Fixes
 
-✔ Clean & Pinned Requirements
+After stabilizing the environment, multiple runtime issues were resolved.
 
-The requirements.txt file was cleaned and stabilized to prevent cascading dependency failures in future setups.
+### ✔ Import Errors Fixed
 
-2️⃣ Code & Runtime Fixes
+Updated incorrect import paths after framework changes.
 
-Once the environment was stable, multiple runtime errors were corrected.
+### ✔ LLM Initialization Fix
 
-✔ Import Fixes
+Fixed a `NameError` where the LLM variable was referenced before assignment.
 
-Corrected invalid import paths after framework upgrades.
+### ✔ Tool Refactoring
 
-✔ LLM Initialization Error
+Custom tools were rewritten to properly inherit from BaseTool and integrate correctly with CrewAI.
 
-Fixed a NameError where the llm variable was referenced before being properly initialized.
-
-✔ Tool Refactoring
-
-Custom tools were rewritten to properly inherit from BaseTool and follow correct structure compatible with CrewAI’s execution pipeline.
-
-✔ FastAPI Stability
+### ✔ FastAPI Stability Improvements
 
 Resolved:
 
-Multipart upload dependency issues
+- Multipart upload issues  
+- File cleanup handling  
+- Sequential task execution flow  
 
-File handling cleanup logic
+### ✔ Model Update
+
+Replaced deprecated OpenAI model references with supported models.
 
-Sequential task execution stability
+---
 
-✔ Model Update
+## 3️⃣ Prompt Engineering Overhaul
 
-Deprecated model references were replaced with supported, current OpenAI models.
-
-3️⃣ Prompt Engineering Overhaul
-
-The original prompts were intentionally unprofessional and logically inconsistent.
-
-This version includes:
-
-Professional agent roles
-
-Clear goals and responsibilities
-
-Structured task descriptions
-
-Logical data flow between agents
-
-The execution pipeline now follows:
-
-Document Verifier → Validates document type
-
-Financial Analyst → Extracts insights
-
-Risk Assessor → Evaluates exposure
-
-Investment Advisor → Provides recommendations
-
-Each task receives contextual input from the previous step to maintain consistency.
-
-🛠 Setup & Installation
-
-Follow these steps to run the project locally.
-
-1️⃣ Clone the Repository
-git clone https://github.com/<your-username>/<your-repo-name>.git
-cd <your-repo-name>
-2️⃣ Create & Activate Virtual Environment
-python -m venv venv
-
-Windows:
-
-venv\Scripts\activate
-
-Mac/Linux:
-
-source venv/bin/activate
-3️⃣ Install Dependencies
-pip install -r requirements.txt
-
-The requirements file is fully stabilized to avoid dependency conflicts.
-
-4️⃣ Configure Environment Variables
-
-Create a .env file in the project root.
-
-Add:
-
-OPENAI_API_KEY=your_openai_api_key_here
-
-⚠️ Never commit the .env file. It is excluded using .gitignore.
-
-🚀 Running the Application
-
-Start the server:
-
-uvicorn main:app --reload
-
-The API will run at:
-
-http://127.0.0.1:8000
-📄 Using the Analyzer
-
-Open browser:
-
-http://127.0.0.1:8000/docs
-
-Expand POST /analyze
-
-Click Try it out
-
-Upload a PDF financial document
-
-Click Execute
-
-You will receive:
-
-Structured financial analysis
-
-Risk insights
-
-Investment perspective
-
-Agent activity is visible in the terminal logs.
-
-🔐 API Key & Billing Information
-
-This project uses the OpenAI API.
-
-Requirements:
-
-Valid OpenAI API key
-
-Active billing enabled
-
-Sufficient quota available
-
-If billing is not configured, the API will return:
-
-429 insufficient_quota
-
-Ensure your OpenAI account has available credits.
-
-🏗 Project Architecture
-main.py      → FastAPI application & endpoint
-agents.py    → Agent definitions (roles & LLM setup)
-task.py      → Sequential task pipeline
-tools.py     → Custom financial document tools
-requirements.txt → Stabilized dependencies
-
-The system uses a sequential CrewAI pipeline, ensuring structured data flow between agents.
-
-📌 Key Improvements in This Version
-
-Stable dependency environment
-
-Removed unnecessary external tooling
-
-Secure API key handling
-
-Clean Git history
-
-Professional prompt engineering
-
-Structured multi-agent workflow
-
-Improved FastAPI file handling
-
-💡 Future Enhancements
-
-Local LLM support (Ollama integration)
-
-Model abstraction layer for provider switching
-
-Advanced financial ratio extraction
-
-Structured JSON output mode
-
-Deployment via Docker
+The original prompts were unstructured and logically inconsistent.
+
+All prompts were rewritten to be:
+
+- Professional  
+- Structured  
+- Goal-oriented  
+- Context-aware  
+
+### Logical Agent Flow
+
+1. **Document Verifier** → Validates document type  
+2. **Financial Analyst** → Extracts financial insights  
+3. **Risk Assessor** → Evaluates financial exposure  
+4. **Investment Advisor** → Provides structured recommendations  
+
+Each task passes context to the next to maintain analytical consistency.
+
+---
+
+## 🏗 Project Structure
+financial-document-analyzer/
+│
+├── main.py              # FastAPI app & endpoints
+├── agents.py            # Agent definitions & LLM configuration
+├── task.py              # Sequential CrewAI task pipeline
+├── tools.py             # Custom financial tools
+├── requirements.txt     # Stabilized dependencies
+├── .gitignore           # Security & cleanup rules
+└── README.md
+
+## 🛠 Setup & Installation
+### 1️⃣ Clone the Repository
+- git clone https://github.com/<your-username>/<your-repo-name>.git
+- cd <your-repo-name>
+
+### 2️⃣ Create & Activate Virtual Environment
+- python -m venv venv
+- Windows: venv\Scripts\activate
+
+### 3️⃣ Install Dependencies
+- pip install -r requirements.txt
+- The requirements.txt file is stabilized to avoid dependency conflicts.
+
+### 4️⃣ Configure Environment Variables
+
+- Create a .env file in the project root:
+- GROQ_API_KEY=your_openai_api_key_here
+
+- ⚠️ Important:
+    - Do NOT commit .env
+    - Ensure .gitignore excludes it
+
+## 🚀 Running the Application
+
+- Start the FastAPI server:
+- uvicorn main:app --reload
+- Server runs at: http://127.0.0.1:8000
+
+## 📄 Using the Analyzer
+- Open browser:
+- http://127.0.0.1:8000/docs
+- Expand POST /analyze
+- Click Try it out
+- Upload a PDF financial document
+- Click Execute
+
+### The response will contain:
+- Financial summary
+- Risk insights
+- Investment analysis
+- Agent execution logs will appear in the terminal.
+
+## 🔐 API & Billing Requirements
+
+- This project uses the OpenAI API.
+- You must have:
+- A valid OpenAI API key
+- Active billing enabled
+- Available usage quota
+- If billing is not configured, you may encounter:
+- 429 insufficient_quota
+- Ensure your OpenAI account has sufficient credits.
+
+## 📌 Key Improvements in This Version
+
+- Stable dependency environment
+- Removed conflicting external tools
+- Secure API key handling
+- Clean Git history
+- Structured multi-agent workflow
+- Professional prompt engineering
+- Improved FastAPI file handling
+
+## 🚀 Future Enhancements
+
+- Local LLM integration (Ollama)
+- Provider abstraction (OpenAI / Groq / Local)
+- Structured JSON output mode
+- Docker deployment
+- Enhanced financial ratio extraction
