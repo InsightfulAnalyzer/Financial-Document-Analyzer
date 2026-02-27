@@ -27,7 +27,10 @@ The following diagram illustrates the high-level flow of the multi-agent pipelin
 - Investment Advisor generates recommendation
 - Final structured output returned to user
 
-![Diagram](assets\diagram.png)
+![Diagram](image.png)
+
+---
+
 ## 🐛 Major Issues Identified & Fixes Implemented
 
 The original implementation contained multiple breaking issues at environment, framework, and code levels.
