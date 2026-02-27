@@ -8,10 +8,10 @@ load_dotenv()
 from crewai import Agent, LLM # type: ignore
 from tools import ReadFinancialDocumentTool
 
+
 # Initialize LLM
 llm = LLM(
-    model="gemini/gemini-1.5-flash",
-    api_key = os.getenv("GOOGLE_API_KEY"),
+    model="ollama/llama3",
     temperature=0.3,
 )
 
