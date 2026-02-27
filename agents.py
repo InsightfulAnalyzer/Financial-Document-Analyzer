@@ -10,8 +10,8 @@ from tools import ReadFinancialDocumentTool
 
 # Initialize LLM
 llm = LLM(
-    model="openai/gpt-4o-mini",
-    api_key = os.getenv("OPENAI_API_KEY"),
+    model="gemini/gemini-1.5-flash",
+    api_key = os.getenv("GOOGLE_API_KEY"),
     temperature=0.3,
 )
 
