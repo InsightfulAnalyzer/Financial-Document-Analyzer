@@ -1,60 +1,64 @@
-## Importing libraries and files
 import os
-from dotenv import load_dotenv
-load_dotenv()
+from typing import Type
 
-from crewai_tools import tools
-from crewai_tools.tools.serper_dev_tool import SerperDevTool
+from crewai.tools import BaseTool  # type: ignore
+from pydantic import BaseModel, Field  # type: ignore
 
-## Creating search tool
-search_tool = SerperDevTool()
+try:
+    from pypdf import PdfReader  # type: ignore
+except ImportError:
+    from PyPDF2 import PdfReader  # type: ignore
 
-## Creating custom pdf reader tool
-class FinancialDocumentTool():
-    async def read_data_tool(path='data/sample.pdf'):
-        """Tool to read data from a pdf file from a path
 
-        Args:
-            path (str, optional): Path of the pdf file. Defaults to 'data/sample.pdf'.
+class ReadFinancialDocumentInput(BaseModel):
+    path: str = Field(
+        default="data/sample.pdf",
+        description="Absolute or relative path to the financial PDF document.",
+    )
 
-        Returns:
-            str: Full Financial Document file
-        """
-        
-        docs = Pdf(file_path=path).load()
 
-        full_report = ""
-        for data in docs:
-            # Clean and format the financial document data
-            content = data.page_content
-            
-            # Remove extra whitespaces and format properly
-            while "\n\n" in content:
-                content = content.replace("\n\n", "\n")
-                
-            full_report += content + "\n"
-            
-        return full_report
+class ReadFinancialDocumentTool(BaseTool):
+    name: str = "read_financial_document"
+    description: str = "Read and return text content from a financial PDF document."
+    args_schema: Type[BaseModel] = ReadFinancialDocumentInput
 
-## Creating Investment Analysis Tool
-class InvestmentTool:
-    async def analyze_investment_tool(financial_document_data):
-        # Process and analyze the financial document data
-        processed_data = financial_document_data
-        
-        # Clean up the data format
-        i = 0
-        while i < len(processed_data):
-            if processed_data[i:i+2] == "  ":  # Remove double spaces
-                processed_data = processed_data[:i] + processed_data[i+1:]
-            else:
-                i += 1
-                
-        # TODO: Implement investment analysis logic here
-        return "Investment analysis functionality to be implemented"
+    def _run(self, path: str = "data/sample.pdf") -> str:
+        if not path:
+            return "No file path provided."
 
-## Creating Risk Assessment Tool
-class RiskTool:
-    async def create_risk_assessment_tool(financial_document_data):        
-        # TODO: Implement risk assessment logic here
-        return "Risk assessment functionality to be implemented"
+        if not os.path.exists(path):
+            return f"File not found: {path}"
+
+        reader = PdfReader(path)
+        pages = []
+        for page in reader.pages:
+            text = page.extract_text() or ""
+            cleaned = " ".join(text.split())
+            if cleaned:
+                pages.append(cleaned)
+
+        if not pages:
+            return "No readable text found in the provided PDF."
+
+        return "\n".join(pages)
+
+
+class InvestmentTool(BaseTool):
+    name: str = "analyze_investment"
+    description: str = "Provide a basic investment perspective from extracted financial text."
+
+    def _run(self, financial_document_data: str) -> str:
+        processed_data = " ".join((financial_document_data or "").split())
+        if not processed_data:
+            return "No financial data provided for investment analysis."
+        return "Investment analysis functionality to be implemented."
+
+
+class RiskTool(BaseTool):
+    name: str = "create_risk_assessment"
+    description: str = "Provide a basic risk assessment from extracted financial text."
+
+    def _run(self, financial_document_data: str) -> str:
+        if not (financial_document_data or "").strip():
+            return "No financial data provided for risk assessment."
+        return "Risk assessment functionality to be implemented."
