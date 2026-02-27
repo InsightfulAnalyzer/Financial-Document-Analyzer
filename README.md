@@ -16,7 +16,18 @@ The system simulates a team of financial experts — each agent has a defined re
 This version represents a fully debugged, stabilized, and refactored implementation after resolving major dependency conflicts, runtime errors, architectural issues, and security flaws.
 
 ---
+## 🏗 Architecture Diagram
 
+The following diagram illustrates the high-level flow of the multi-agent pipeline:
+
+- User uploads financial document via FastAPI
+- Document is validated by Verifier Agent
+- Financial Analyst extracts key metrics
+- Risk Assessor evaluates exposure
+- Investment Advisor generates recommendation
+- Final structured output returned to user
+
+![Diagram](assets\diagram.png)
 ## 🐛 Major Issues Identified & Fixes Implemented
 
 The original implementation contained multiple breaking issues at environment, framework, and code levels.
