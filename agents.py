@@ -11,7 +11,8 @@ from tools import ReadFinancialDocumentTool
 
 # Initialize LLM
 llm = LLM(
-    model="ollama/llama3",
+    model="groq/llama3-70b-8192",
+    api_key=os.getenv("GROQ_API_KEY"),
     temperature=0.3,
 )
 
